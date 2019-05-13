@@ -1,3 +1,6 @@
+# This wallet is under development and should NOT be used at this time
+Skellers (13th May, 2019)
+
 ZecWallet is a z-Addr first, Sapling compatible wallet and full node for zcashd that runs on Linux, Windows and macOS.
 
 ![Screenshot](docs/screenshot-main.png?raw=true)
