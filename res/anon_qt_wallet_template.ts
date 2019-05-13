@@ -18,7 +18,7 @@
     <name>ConnectionDialog</name>
     <message>
         <location filename="../src/connection.ui" line="17"/>
-        <source>zec-qt-wallet</source>
+        <source>anon-qt-wallet</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
@@ -31,7 +31,7 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/mainwindow.ui" line="14"/>
-        <source>zec-qt-wallet</source>
+        <source>anon-qt-wallet</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
@@ -210,7 +210,7 @@
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="834"/>
-        <source>zcashd</source>
+        <source>anond</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
@@ -345,7 +345,7 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="471"/>
-        <source>Thanks for supporting zec-qt-wallet!</source>
+        <source>Thanks for supporting anon-qt-wallet!</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
@@ -355,7 +355,7 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="473"/>
-        <source> to support zec-qt-wallet</source>
+        <source> to support anon-qt-wallet</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
@@ -391,7 +391,7 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="631"/>
-        <source>The keys will be imported into your connected zcashd node</source>
+        <source>The keys will be imported into your connected anond node</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
@@ -406,7 +406,7 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="671"/>
-        <source>You need to back it up from the machine zcashd is running on</source>
+        <source>You need to back it up from the machine anond is running on</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
@@ -577,43 +577,43 @@ doesn&apos;t look like a z-address</source>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="50"/>
-        <source>Starting embedded zcashd</source>
+        <source>Starting embedded anond</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="60"/>
-        <source>zcashd is set to run as daemon</source>
+        <source>anond is set to run as daemon</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="60"/>
-        <source>Waiting for zcashd</source>
+        <source>Waiting for anond</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="75"/>
-        <source>You have zcashd set to start as a daemon, which can cause problems with zec-qt-wallet
+        <source>You have anond set to start as a daemon, which can cause problems with anon-qt-wallet
 
-.Please remove the following line from your zcash.conf and restart zec-qt-wallet
+.Please remove the following line from your anon.conf and restart anon-qt-wallet
 daemon=1</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="80"/>
-        <source>Couldn&apos;t start the embedded zcashd.
+        <source>Couldn&apos;t start the embedded anond.
 
 Please try restarting.
 
-If you previously started zcashd with custom arguments, you might need to reset zcash.conf.
+If you previously started anond with custom arguments, you might need to reset anon.conf.
 
-If all else fails, please run zcashd manually.</source>
+If all else fails, please run anond manually.</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="91"/>
-        <source>Couldn&apos;t connect to zcashd configured in zcash.conf.
+        <source>Couldn&apos;t connect to anond configured in anon.conf.
 
-Not starting embedded zcashd because --no-embedded was passed</source>
+Not starting embedded anond because --no-embedded was passed</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
@@ -679,12 +679,12 @@ Not starting embedded zcashd because --no-embedded was passed</source>
     </message>
     <message>
         <location filename="../src/rpc.cpp" line="593"/>
-        <source>Connected to zcashd</source>
+        <source>Connected to anond</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
         <location filename="../src/rpc.cpp" line="609"/>
-        <source>There was an error connecting to zcashd. The error was</source>
+        <source>There was an error connecting to anond. The error was</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
@@ -714,12 +714,12 @@ Not starting embedded zcashd because --no-embedded was passed</source>
     </message>
     <message>
         <location filename="../src/rpc.cpp" line="953"/>
-        <source>Please wait for zec-qt-wallet to exit</source>
+        <source>Please wait for anon-qt-wallet to exit</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
         <location filename="../src/rpc.cpp" line="954"/>
-        <source>Waiting for zcashd to exit</source>
+        <source>Waiting for anond to exit</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
@@ -729,7 +729,7 @@ Not starting embedded zcashd because --no-embedded was passed</source>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="272"/>
-        <source>zcashd error</source>
+        <source>anond error</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
@@ -741,19 +741,19 @@ Please set the host/port and user/password in the Edit-&gt;Settings menu.</sourc
     </message>
     <message>
         <location filename="../src/connection.cpp" line="351"/>
-        <source>Could not connect to zcashd configured in settings.
+        <source>Could not connect to anond configured in settings.
 
 Please set the host/port and user/password in the Edit-&gt;Settings menu.</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="411"/>
-        <source>Authentication failed. The username / password you specified was not accepted by zcashd. Try changing it in the Edit-&gt;Settings menu</source>
+        <source>Authentication failed. The username / password you specified was not accepted by anond. Try changing it in the Edit-&gt;Settings menu</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="426"/>
-        <source>Your zcashd is starting up. Please wait.</source>
+        <source>Your anond is starting up. Please wait.</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
@@ -786,7 +786,7 @@ Please set the host/port and user/password in the Edit-&gt;Settings menu.</sourc
     </message>
     <message>
         <location filename="../src/addressbook.cpp" line="127"/>
-        <source> doesn&apos;t seem to be a valid Zcash address.</source>
+        <source> doesn&apos;t seem to be a valid Anon address.</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
@@ -855,7 +855,7 @@ You either have unconfirmed funds or the balance is too low for an automatic mig
     </message>
     <message>
         <location filename="../src/settings.ui" line="33"/>
-        <source>zcashd connection</source>
+        <source>anond connection</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
@@ -1094,7 +1094,7 @@ You either have unconfirmed funds or the balance is too low for an automatic mig
     </message>
     <message>
         <location filename="../src/zboard.ui" line="85"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;ZBoard: Fully anonymous and untraceable chat messages based on the ZCash blockchain. &lt;a href=&quot;http://www.z-board.net/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.z-board.net/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;ZBoard: Fully anonymous and untraceable chat messages based on the Anon blockchain. &lt;a href=&quot;http://www.z-board.net/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.z-board.net/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>

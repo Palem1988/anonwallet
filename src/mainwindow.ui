@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>ZecWallet</string>
+   <string>AnonWallet</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../application.qrc">
@@ -898,13 +898,13 @@
       </widget>
       <widget class="QWidget" name="tab_5">
        <attribute name="title">
-        <string>zcashd</string>
+        <string>anond</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_7">
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_14">
           <item>
-           <widget class="FilledIconLabel" name="zcashdlogo">
+           <widget class="FilledIconLabel" name="anondlogo">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -1052,9 +1052,9 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="actionRequest_zcash"/>
+    <!-- <addaction name="actionRequest_anon"/>
     <addaction name="actionPay_URI"/>
-    <addaction name="separator"/>
+    <addaction name="separator"/> -->
     <addaction name="actionImport_Private_Key"/>
     <addaction name="actionExport_All_Private_Keys"/>
     <addaction name="actionBackup_wallet_dat"/>
@@ -1078,7 +1078,7 @@
     <addaction name="actionConnect_Mobile_App"/>
     <addaction name="separator"/>
     <addaction name="actionz_board_net"/>
-    <addaction name="actionTurnstile_Migration"/>
+    <!-- <addaction name="actionTurnstile_Migration"/> -->
    </widget>
    <widget class="QMenu" name="menu_Edit">
     <property name="title">
@@ -1167,7 +1167,7 @@
   </action>
   <action name="actionPay_URI">
    <property name="text">
-    <string>Pay zcash &amp;URI...</string>
+    <string>Pay anon &amp;URI...</string>
    </property>
   </action>
   <action name="actionConnect_Mobile_App">
@@ -1178,9 +1178,9 @@
     <string>Ctrl+M</string>
    </property>
   </action>
-  <action name="actionRequest_zcash">
+  <action name="actionRequest_anon">
    <property name="text">
-    <string>Request zcash...</string>
+    <string>Request anon...</string>
    </property>
   </action>
  </widget>

@@ -132,14 +132,14 @@ void TxTableModel::updateAllData() {
                         return addr;
                 }
         case 2: return QDateTime::fromMSecsSinceEpoch(modeldata->at(index.row()).datetime *  (qint64)1000).toLocalTime().toString();
-        case 3: return Settings::getZECDisplayFormat(modeldata->at(index.row()).amount);
+        case 3: return Settings::getANONDisplayFormat(modeldata->at(index.row()).amount);
         }
     } 
 
     if (role == Qt::ToolTipRole) {
         switch (index.column()) {
         case 0: { 
-                    if (dat.memo.startsWith("zcash:")) {
+                    if (dat.memo.startsWith("anon:")) {
                         return Settings::paymentURIPretty(Settings::parseURI(dat.memo));
                     } else {
                         return modeldata->at(index.row()).type + 
@@ -161,7 +161,7 @@ void TxTableModel::updateAllData() {
     if (role == Qt::DecorationRole && index.column() == 0) {
         if (!dat.memo.isEmpty()) {
             // If the memo is a Payment URI, then show a payment request icon
-            if (dat.memo.startsWith("zcash:")) {
+            if (dat.memo.startsWith("anon:")) {
                 QIcon icon(":/icons/res/paymentreq.gif");
                 return QVariant(icon.pixmap(16, 16));
             } else {

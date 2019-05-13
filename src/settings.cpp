@@ -40,7 +40,7 @@ void Settings::saveSettings(const QString& host, const QString& port, const QStr
     init();
 }
 
-void Settings::setUsingZcashConf(QString confLocation) {
+void Settings::setUsingAnonConf(QString confLocation) {
     if (!confLocation.isEmpty())
         _confLocation = confLocation;
 }
@@ -79,15 +79,15 @@ bool Settings::isTAddress(QString addr) {
     if (!isValidAddress(addr))
         return false;
         
-    return addr.startsWith("t");
+    return addr.startsWith("A");
 }
 
-int Settings::getZcashdVersion() {
-    return _zcashdVersion;
+int Settings::getAnondVersion() {
+    return _anondVersion;
 }
 
-void Settings::setZcashdVersion(int version) {
-    _zcashdVersion = version;
+void Settings::setAnondVersion(int version) {
+    _anondVersion = version;
 }
 
 bool Settings::isSyncing() {
@@ -111,8 +111,8 @@ bool Settings::isSaplingActive() {
            (!isTestnet() && getBlockNumber() > 419200);
 }
 
-double Settings::getZECPrice() { 
-    return zecPrice; 
+double Settings::getANONPrice() { 
+    return anonPrice; 
 }
 
 bool Settings::getAutoShield() {
@@ -161,7 +161,7 @@ void Settings::saveRestore(QDialog* d) {
 }
 
 QString Settings::getUSDFormat(double bal) {
-    return "$" + QLocale(QLocale::English).toString(bal * Settings::getInstance()->getZECPrice(), 'f', 2);
+    return "$" + QLocale(QLocale::English).toString(bal * Settings::getInstance()->getANONPrice(), 'f', 2);
 }
 
 QString Settings::getDecimalString(double amt) {
@@ -176,17 +176,17 @@ QString Settings::getDecimalString(double amt) {
     return f;
 }
 
-QString Settings::getZECDisplayFormat(double bal) {
+QString Settings::getANONDisplayFormat(double bal) {
     // This is idiotic. Why doesn't QString have a way to do this?
     return getDecimalString(bal) % " " % Settings::getTokenName();
 }
 
-QString Settings::getZECUSDDisplayFormat(double bal) {
+QString Settings::getANONUSDDisplayFormat(double bal) {
     auto usdFormat = getUSDFormat(bal);
     if (!usdFormat.isEmpty())
-        return getZECDisplayFormat(bal) % " (" % getUSDFormat(bal) % ")";
+        return getANONDisplayFormat(bal) % " (" % getUSDFormat(bal) % ")";
     else
-        return getZECDisplayFormat(bal);
+        return getANONDisplayFormat(bal);
 }
 
 const QString Settings::txidStatusMessage = QString(QObject::tr("Tx submitted (right click to copy) txid:"));
@@ -195,7 +195,7 @@ QString Settings::getTokenName() {
     if (Settings::getInstance()->isTestnet()) {
         return "TAZ";
     } else {
-        return "ZEC";
+        return "ANON";
     }
 }
 
@@ -212,7 +212,7 @@ QString Settings::getDonationAddr(bool sapling) {
             return "zcEgrceTwvoiFdEvPWcsJHAMrpLsprMF6aRJiQa3fan5ZphyXLPuHghnEPrEPRoEVzUy65GnMVyCTRdkT6BYBepnXh6NBYs";    
 }
 
-bool Settings::addToZcashConf(QString confLocation, QString line) {
+bool Settings::addToAnonConf(QString confLocation, QString line) {
     QFile file(confLocation);
     if (!file.open(QIODevice::ReadWrite | QIODevice::Append))
         return false;
@@ -225,7 +225,7 @@ bool Settings::addToZcashConf(QString confLocation, QString line) {
     return true;
 }
 
-bool Settings::removeFromZcashConf(QString confLocation, QString option) {
+bool Settings::removeFromAnonConf(QString confLocation, QString option) {
     if (confLocation.isEmpty())
         return false;
 
@@ -280,7 +280,7 @@ bool Settings::isValidAddress(QString addr) {
     QRegExp zcexp("^z[a-z0-9]{94}$",  Qt::CaseInsensitive);
     QRegExp zsexp("^z[a-z0-9]{77}$",  Qt::CaseInsensitive);
     QRegExp ztsexp("^ztestsapling[a-z0-9]{76}", Qt::CaseInsensitive);
-    QRegExp texp("^t[a-z0-9]{34}$", Qt::CaseInsensitive);
+    QRegExp texp("^A[a-z0-9]{34}$", Qt::CaseInsensitive);
 
     return  zcexp.exactMatch(addr)  || texp.exactMatch(addr) || 
             ztsexp.exactMatch(addr) || zsexp.exactMatch(addr);
@@ -288,7 +288,7 @@ bool Settings::isValidAddress(QString addr) {
 
 // Get a pretty string representation of this Payment URI
 QString Settings::paymentURIPretty(PaymentURI uri) {
-    return QString() + "Payment Request\n" + "Pay: " + uri.addr + "\nAmount: " + getZECDisplayFormat(uri.amt.toDouble()) 
+    return QString() + "Payment Request\n" + "Pay: " + uri.addr + "\nAmount: " + getANONDisplayFormat(uri.amt.toDouble()) 
         + "\nMemo:" + QUrl::fromPercentEncoding(uri.memo.toUtf8());
 }
 
@@ -296,12 +296,12 @@ QString Settings::paymentURIPretty(PaymentURI uri) {
 PaymentURI Settings::parseURI(QString uri) {
     PaymentURI ans;
 
-    if (!uri.startsWith("zcash:")) {
-        ans.error = "Not a zcash payment URI";
+    if (!uri.startsWith("anon:")) {
+        ans.error = "Not a anon payment URI";
         return ans;
     }
 
-    uri = uri.right(uri.length() - QString("zcash:").length());
+    uri = uri.right(uri.length() - QString("anon:").length());
     
     QRegExp re("([a-zA-Z0-9]+)");
     int pos;

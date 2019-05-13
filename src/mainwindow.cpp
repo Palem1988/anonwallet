@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    logger = new Logger(this, QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("zec-qt-wallet.log"));
+    logger = new Logger(this, QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("anon-qt-wallet.log"));
 
     // Status Bar
     setupStatusBar();
@@ -46,14 +46,14 @@ MainWindow::MainWindow(QWidget *parent) :
         rpc->checkForUpdate(false);
     });
 
-    // Request zcash
-    QObject::connect(ui->actionRequest_zcash, &QAction::triggered, [=]() {
-        RequestDialog::showRequestZcash(this);
+    // Request anon
+    QObject::connect(ui->actionRequest_anon, &QAction::triggered, [=]() {
+        RequestDialog::showRequestAnon(this);
     });
 
-    // Pay Zcash URI
+    // Pay Anon URI
     QObject::connect(ui->actionPay_URI, &QAction::triggered, [=] () {
-        payZcashURI();
+        payAnonURI();
     });
 
     // Import Private Key
@@ -98,8 +98,8 @@ MainWindow::MainWindow(QWidget *parent) :
     // Initialize to the balances tab
     ui->tabWidget->setCurrentIndex(0);
 
-    // The zcashd tab is hidden by default, and only later added in if the embedded zcashd is started
-    zcashdtab = ui->tabWidget->widget(4);
+    // The anond tab is hidden by default, and only later added in if the embedded anond is started
+    anondtab = ui->tabWidget->widget(4);
     ui->tabWidget->removeTab(4);
 
     setupSendTab();
@@ -107,7 +107,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setupRecieveTab();
     setupBalancesTab();
     setupTurnstileDialog();
-    setupZcashdTab();
+    setupAnondTab();
 
     rpc = new RPC(this);
 
@@ -176,7 +176,7 @@ void MainWindow::closeEvent(QCloseEvent* event) {
     s.sync();
 
     // Let the RPC know to shut down any running service.
-    rpc->shutdownZcashd();
+    rpc->shutdownAnond();
 
     // Bubble up
     if (event)
@@ -291,7 +291,7 @@ void MainWindow::turnstileDoMigration(QString fromAddr) {
         return bal;
     };
 
-    turnstile.fromBalance->setText(Settings::getZECUSDDisplayFormat(fnGetAllSproutBalance()));
+    turnstile.fromBalance->setText(Settings::getANONUSDDisplayFormat(fnGetAllSproutBalance()));
     for (auto addr : *rpc->getAllZAddresses()) {
         auto bal = rpc->getAllBalances()->value(addr);
         if (Settings::getInstance()->isSaplingAddress(addr)) {
@@ -315,12 +315,12 @@ void MainWindow::turnstileDoMigration(QString fromAddr) {
             bal = rpc->getAllBalances()->value(addr);
         }
         
-        auto balTxt = Settings::getZECUSDDisplayFormat(bal);
+        auto balTxt = Settings::getANONUSDDisplayFormat(bal);
         
         if (bal < Turnstile::minMigrationAmount) {
             turnstile.fromBalance->setStyleSheet("color: red;");
             turnstile.fromBalance->setText(balTxt % " [You need at least " 
-                        % Settings::getZECDisplayFormat(Turnstile::minMigrationAmount)
+                        % Settings::getANONDisplayFormat(Turnstile::minMigrationAmount)
                         % " for automatic migration]");
             turnstile.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
         } else {
@@ -348,7 +348,7 @@ void MainWindow::turnstileDoMigration(QString fromAddr) {
     QObject::connect(turnstile.privLevel, QOverload<int>::of(&QComboBox::currentIndexChanged), [=] (auto idx) {
         // Update the fees
         turnstile.minerFee->setText(
-            Settings::getZECUSDDisplayFormat(std::get<0>(privOptions[idx]) * Settings::getMinerFee()));
+            Settings::getANONUSDDisplayFormat(std::get<0>(privOptions[idx]) * Settings::getMinerFee()));
     });
 
     for (auto i : privOptions) {
@@ -450,7 +450,7 @@ void MainWindow::setupSettingsModal() {
         // Setup clear button
         QObject::connect(settings.btnClearSaved, &QCheckBox::clicked, [=]() {
             if (QMessageBox::warning(this, "Clear saved history?",
-                "Shielded z-Address transactions are stored locally in your wallet, outside zcashd. You may delete this saved information safely any time for your privacy.\nDo you want to delete the saved shielded transactions now?",
+                "Shielded z-Address transactions are stored locally in your wallet, outside anond. You may delete this saved information safely any time for your privacy.\nDo you want to delete the saved shielded transactions now?",
                 QMessageBox::Yes, QMessageBox::Cancel)) {
                     SentTxStore::deleteHistory();
                     // Reload after the clear button so existing txs disappear
@@ -473,10 +473,10 @@ void MainWindow::setupSettingsModal() {
             isUsingTor = !rpc->getConnection()->config->proxy.isEmpty();
         }
         settings.chkTor->setChecked(isUsingTor);
-        if (rpc->getEZcashD() == nullptr) {
+        if (rpc->getEAnonD() == nullptr) {
             settings.chkTor->setEnabled(false);
             settings.lblTor->setEnabled(false);
-            QString tooltip = tr("Tor configuration is available only when running an embedded zcashd.");
+            QString tooltip = tr("Tor configuration is available only when running an embedded anond.");
             settings.chkTor->setToolTip(tooltip);
             settings.lblTor->setToolTip(tooltip);
         }
@@ -485,17 +485,17 @@ void MainWindow::setupSettingsModal() {
         QIntValidator validator(0, 65535);
         settings.port->setValidator(&validator);
 
-        // If values are coming from zcash.conf, then disable all the fields
-        auto zcashConfLocation = Settings::getInstance()->getZcashdConfLocation();
-        if (!zcashConfLocation.isEmpty()) {
-            settings.confMsg->setText("Settings are being read from \n" + zcashConfLocation);
+        // If values are coming from anon.conf, then disable all the fields
+        auto anonConfLocation = Settings::getInstance()->getAnondConfLocation();
+        if (!anonConfLocation.isEmpty()) {
+            settings.confMsg->setText("Settings are being read from \n" + anonConfLocation);
             settings.hostname->setEnabled(false);
             settings.port->setEnabled(false);
             settings.rpcuser->setEnabled(false);
             settings.rpcpassword->setEnabled(false);
         }
         else {
-            settings.confMsg->setText("No local zcash.conf found. Please configure connection manually.");
+            settings.confMsg->setText("No local anon.conf found. Please configure connection manually.");
             settings.hostname->setEnabled(true);
             settings.port->setEnabled(true);
             settings.rpcuser->setEnabled(true);
@@ -512,13 +512,13 @@ void MainWindow::setupSettingsModal() {
         // Connection tab by default
         settings.tabWidget->setCurrentIndex(0);
 
-        // Enable the troubleshooting options only if using embedded zcashd
+        // Enable the troubleshooting options only if using embedded anond
         if (!rpc->isEmbedded()) {
             settings.chkRescan->setEnabled(false);
-            settings.chkRescan->setToolTip(tr("You're using an external zcashd. Please restart zcashd with -rescan"));
+            settings.chkRescan->setToolTip(tr("You're using an external anond. Please restart anond with -rescan"));
 
             settings.chkReindex->setEnabled(false);
-            settings.chkReindex->setToolTip(tr("You're using an external zcashd. Please restart zcashd with -reindex"));
+            settings.chkReindex->setToolTip(tr("You're using an external anond. Please restart anond with -reindex"));
         }
 
         if (settingsDialog.exec() == QDialog::Accepted) {
@@ -534,25 +534,25 @@ void MainWindow::setupSettingsModal() {
 
             if (!isUsingTor && settings.chkTor->isChecked()) {
                 // If "use tor" was previously unchecked and now checked
-                Settings::addToZcashConf(zcashConfLocation, "proxy=127.0.0.1:9050");
+                Settings::addToAnonConf(anonConfLocation, "proxy=127.0.0.1:9050");
                 rpc->getConnection()->config->proxy = "proxy=127.0.0.1:9050";
 
                 QMessageBox::information(this, tr("Enable Tor"), 
-                    tr("Connection over Tor has been enabled. To use this feature, you need to restart ZecWallet."), 
+                    tr("Connection over Tor has been enabled. To use this feature, you need to restart AnonWallet."), 
                     QMessageBox::Ok);
             }
 
             if (isUsingTor && !settings.chkTor->isChecked()) {
                 // If "use tor" was previously checked and now is unchecked
-                Settings::removeFromZcashConf(zcashConfLocation, "proxy");
+                Settings::removeFromAnonConf(anonConfLocation, "proxy");
                 rpc->getConnection()->config->proxy.clear();
 
                 QMessageBox::information(this, tr("Disable Tor"),
-                    tr("Connection over Tor has been disabled. To fully disconnect from Tor, you need to restart ZecWallet."),
+                    tr("Connection over Tor has been disabled. To fully disconnect from Tor, you need to restart AnonWallet."),
                     QMessageBox::Ok);
             }
 
-            if (zcashConfLocation.isEmpty()) {
+            if (anonConfLocation.isEmpty()) {
                 // Save settings
                 Settings::getInstance()->saveSettings(
                     settings.hostname->text(),
@@ -567,19 +567,19 @@ void MainWindow::setupSettingsModal() {
             // Check to see if rescan or reindex have been enabled
             bool showRestartInfo = false;
             if (settings.chkRescan->isChecked()) {
-                Settings::addToZcashConf(zcashConfLocation, "rescan=1");
+                Settings::addToAnonConf(anonConfLocation, "rescan=1");
                 showRestartInfo = true;
             }
 
             if (settings.chkReindex->isChecked()) {
-                Settings::addToZcashConf(zcashConfLocation, "reindex=1");
+                Settings::addToAnonConf(anonConfLocation, "reindex=1");
                 showRestartInfo = true;
             }
 
             if (showRestartInfo) {
-                auto desc = tr("ZecWallet needs to restart to rescan/reindex. ZecWallet will now close, please restart ZecWallet to continue");
+                auto desc = tr("AnonWallet needs to restart to rescan/reindex. AnonWallet will now close, please restart AnonWallet to continue");
                 
-                QMessageBox::information(this, tr("Restart ZecWallet"), desc, QMessageBox::Ok);
+                QMessageBox::information(this, tr("Restart AnonWallet"), desc, QMessageBox::Ok);
                 QTimer::singleShot(1, [=]() { this->close(); });
             }
         }
@@ -609,9 +609,9 @@ void MainWindow::donate() {
                             Settings::getInstance()->isSaplingAddress(ui->inputsCombo->currentText())));
     ui->Address1->setCursorPosition(0);
     ui->Amount1->setText("0.01");
-    ui->MemoTxt1->setText(tr("Thanks for supporting ZecWallet!"));
+    ui->MemoTxt1->setText(tr("Thanks for supporting AnonWallet!"));
 
-    ui->statusBar->showMessage(tr("Donate 0.01 ") % Settings::getTokenName() % tr(" to support ZecWallet"));
+    ui->statusBar->showMessage(tr("Donate 0.01 ") % Settings::getTokenName() % tr(" to support AnonWallet"));
 
     // And switch to the send tab.
     ui->tabWidget->setCurrentIndex(1);
@@ -657,7 +657,7 @@ void MainWindow::postToZBoard() {
     QRegExpValidator v(QRegExp("^[a-zA-Z0-9_]{3,20}$"), zb.postAs);
     zb.postAs->setValidator(&v);
 
-    zb.feeAmount->setText(Settings::getZECUSDDisplayFormat(Settings::getZboardAmount() + Settings::getMinerFee()));
+    zb.feeAmount->setText(Settings::getANONUSDDisplayFormat(Settings::getZboardAmount() + Settings::getMinerFee()));
 
     auto fnBuildNameMemo = [=]() -> QString {
         auto memo = zb.memoTxt->toPlainText().trimmed();
@@ -773,8 +773,8 @@ void MainWindow::balancesReady() {
     // There is a pending URI payment (from the command line, or from a secondary instance),
     // process it.
     if (!pendingURIPayment.isEmpty()) {
-        qDebug() << "Paying zcash URI";
-        payZcashURI(pendingURIPayment);
+        qDebug() << "Paying anon URI";
+        payAnonURI(pendingURIPayment);
         pendingURIPayment = "";
     }
 
@@ -785,7 +785,7 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event) {
     if (event->type() == QEvent::FileOpen) {
         QFileOpenEvent *fileEvent = static_cast<QFileOpenEvent*>(event);
         if (!fileEvent->url().isEmpty())
-            payZcashURI(fileEvent->url().toString());
+            payAnonURI(fileEvent->url().toString());
 
         return true;
     }
@@ -794,10 +794,10 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event) {
 }
 
 
-// Pay the Zcash URI by showing a confirmation window. If the URI parameter is empty, the UI
+// Pay the Anon URI by showing a confirmation window. If the URI parameter is empty, the UI
 // will prompt for one. If the myAddr is empty, then the default from address is used to send
 // the transaction.
-void MainWindow::payZcashURI(QString uri, QString myAddr) {
+void MainWindow::payAnonURI(QString uri, QString myAddr) {
     // If the Payments UI is not ready (i.e, all balances have not loaded), defer the payment URI
     if (!uiPaymentsReady) {
         qDebug() << "Payment UI not ready, waiting for UI to pay URI";
@@ -807,8 +807,8 @@ void MainWindow::payZcashURI(QString uri, QString myAddr) {
 
     // If there was no URI passed, ask the user for one.
     if (uri.isEmpty()) {
-        uri = QInputDialog::getText(this, tr("Paste Zcash URI"),
-            "Zcash URI" + QString(" ").repeated(180));
+        uri = QInputDialog::getText(this, tr("Paste Anon URI"),
+            "Anon URI" + QString(" ").repeated(180));
     }
 
     // If there's no URI, just exit
@@ -819,8 +819,8 @@ void MainWindow::payZcashURI(QString uri, QString myAddr) {
     qDebug() << "Recieved URI " << uri;
     PaymentURI paymentInfo = Settings::parseURI(uri);
     if (!paymentInfo.error.isEmpty()) {
-        QMessageBox::critical(this, tr("Error paying zcash URI"), 
-                tr("URI should be of the form 'zcash:<addr>?amt=x&memo=y") + "\n" + paymentInfo.error);
+        QMessageBox::critical(this, tr("Error paying anon URI"), 
+                tr("URI should be of the form 'anon:<addr>?amt=x&memo=y") + "\n" + paymentInfo.error);
         return;
     }
 
@@ -856,7 +856,7 @@ void MainWindow::importPrivKey() {
     pui.buttonBox->button(QDialogButtonBox::Save)->setVisible(false);
     pui.helpLbl->setText(QString() %
                         tr("Please paste your private keys (z-Addr or t-Addr) here, one per line") % ".\n" %
-                        tr("The keys will be imported into your connected zcashd node"));  
+                        tr("The keys will be imported into your connected anond node"));  
 
     if (d.exec() == QDialog::Accepted && !pui.privKeyTxt->toPlainText().trimmed().isEmpty()) {
         auto rawkeys = pui.privKeyTxt->toPlainText().trimmed().split("\n");
@@ -887,7 +887,7 @@ void MainWindow::importPrivKey() {
  */
 void MainWindow::exportTransactions() {
     // First, get the export file name
-    QString exportName = "zcash-transactions-" + QDateTime::currentDateTime().toString("yyyyMMdd") + ".csv";
+    QString exportName = "anon-transactions-" + QDateTime::currentDateTime().toString("yyyyMMdd") + ".csv";
 
     QUrl csvName = QFileDialog::getSaveFileUrl(this, 
             tr("Export transactions"), exportName, "CSV file (*.csv)");
@@ -903,24 +903,24 @@ void MainWindow::exportTransactions() {
 
 /**
  * Backup the wallet.dat file. This is kind of a hack, since it has to read from the filesystem rather than an RPC call
- * This might fail for various reasons - Remote zcashd, non-standard locations, custom params passed to zcashd, many others
+ * This might fail for various reasons - Remote anond, non-standard locations, custom params passed to anond, many others
 */
 void MainWindow::backupWalletDat() {
     if (!rpc->getConnection())
         return;
 
-    QDir zcashdir(rpc->getConnection()->config->zcashDir);
-    QString backupDefaultName = "zcash-wallet-backup-" + QDateTime::currentDateTime().toString("yyyyMMdd") + ".dat";
+    QDir anondir(rpc->getConnection()->config->anonDir);
+    QString backupDefaultName = "anon-wallet-backup-" + QDateTime::currentDateTime().toString("yyyyMMdd") + ".dat";
 
     if (Settings::getInstance()->isTestnet()) {
-        zcashdir.cd("testnet3");
+        anondir.cd("testnet3");
         backupDefaultName = "testnet-" + backupDefaultName;
     }
     
-    QFile wallet(zcashdir.filePath("wallet.dat"));
+    QFile wallet(anondir.filePath("wallet.dat"));
     if (!wallet.exists()) {
         QMessageBox::critical(this, tr("No wallet.dat"), tr("Couldn't find the wallet.dat on this computer") + "\n" +
-            tr("You need to back it up from the machine zcashd is running on"), QMessageBox::Ok);
+            tr("You need to back it up from the machine anond is running on"), QMessageBox::Ok);
         return;
     }
     
@@ -968,7 +968,7 @@ void MainWindow::exportKeys(QString addr) {
     // Wire up save button
     QObject::connect(pui.buttonBox->button(QDialogButtonBox::Save), &QPushButton::clicked, [=] () {
         QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"),
-                           allKeys ? "zcash-all-privatekeys.txt" : "zcash-privatekey.txt");
+                           allKeys ? "anon-all-privatekeys.txt" : "anon-privatekey.txt");
         QFile file(fileName);
         if (!file.open(QIODevice::WriteOnly)) {
             QMessageBox::information(this, tr("Unable to open file"), file.errorString());
@@ -1111,8 +1111,8 @@ void MainWindow::setupBalancesTab() {
     });
 }
 
-void MainWindow::setupZcashdTab() {    
-    ui->zcashdlogo->setBasePixmap(QPixmap(":/img/res/zcashdlogo.gif"));
+void MainWindow::setupAnondTab() {    
+    ui->anondlogo->setBasePixmap(QPixmap(":/img/res/anondlogo.gif"));
 }
 
 void MainWindow::setupTransactionsTab() {
@@ -1167,7 +1167,7 @@ void MainWindow::setupTransactionsTab() {
         });
 
         // Payment Request
-        if (!memo.isEmpty() && memo.startsWith("zcash:")) {
+        if (!memo.isEmpty() && memo.startsWith("anon:")) {
             menu.addAction(tr("View Payment Request"), [=] () {
                 RequestDialog::showPaymentConfirmation(this, memo);
             });
@@ -1338,7 +1338,7 @@ void MainWindow::setupRecieveTab() {
         }
         
         ui->rcvLabel->setText(label);
-        ui->rcvBal->setText(Settings::getZECUSDDisplayFormat(rpc->getAllBalances()->value(addr)));
+        ui->rcvBal->setText(Settings::getANONUSDDisplayFormat(rpc->getAllBalances()->value(addr)));
         ui->txtRecieve->setPlainText(addr);       
         ui->qrcodeDisplay->setQrcodeString(addr);
         if (rpc->getUsedAddresses()->value(addr, false)) {

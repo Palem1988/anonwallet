@@ -31,8 +31,8 @@
     <name>ConnectionDialog</name>
     <message>
         <location filename="../src/connection.ui" line="17"/>
-        <source>ZecWallet</source>
-        <translation>ZecWallet</translation>
+        <source>AnonWallet</source>
+        <translation>AnonWallet</translation>
     </message>
     <message>
         <location filename="../src/connection.ui" line="58"/>
@@ -44,8 +44,8 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/mainwindow.ui" line="14"/>
-        <source>ZecWallet</source>
-        <translation>ZecWallet</translation>
+        <source>AnonWallet</source>
+        <translation>AnonWallet</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="29"/>
@@ -256,8 +256,8 @@
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="901"/>
-        <source>zcashd</source>
-        <translation>zcashd</translation>
+        <source>anond</source>
+        <translation>anond</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="931"/>
@@ -397,8 +397,8 @@
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="1170"/>
-        <source>Pay zcash &amp;URI...</source>
-        <translation>PAyer une URI zcash</translation>
+        <source>Pay anon &amp;URI...</source>
+        <translation>PAyer une URI anon</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="1175"/>
@@ -412,22 +412,22 @@
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="1183"/>
-        <source>Request zcash...</source>
+        <source>Request anon...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="479"/>
-        <source>Tor configuration is available only when running an embedded zcashd.</source>
-        <translation>La configuration de Tor est disponible uniquement lors de l&apos;exécution du processus zcashd intégré. </translation>
+        <source>Tor configuration is available only when running an embedded anond.</source>
+        <translation>La configuration de Tor est disponible uniquement lors de l&apos;exécution du processus anond intégré. </translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="518"/>
-        <source>You&apos;re using an external zcashd. Please restart zcashd with -rescan</source>
+        <source>You&apos;re using an external anond. Please restart anond with -rescan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="521"/>
-        <source>You&apos;re using an external zcashd. Please restart zcashd with -reindex</source>
+        <source>You&apos;re using an external anond. Please restart anond with -reindex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -437,8 +437,8 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="541"/>
-        <source>Connection over Tor has been enabled. To use this feature, you need to restart ZecWallet.</source>
-        <translation>La connection via Tor est activée. Afin d&apos;utiliser cette fonctionnalité, veuillez redémarer ZecWallet.</translation>
+        <source>Connection over Tor has been enabled. To use this feature, you need to restart AnonWallet.</source>
+        <translation>La connection via Tor est activée. Afin d&apos;utiliser cette fonctionnalité, veuillez redémarer AnonWallet.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="550"/>
@@ -447,13 +447,13 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="551"/>
-        <source>Connection over Tor has been disabled. To fully disconnect from Tor, you need to restart ZecWallet.</source>
-        <translation>La connection via Tor a été désactivée. Afin de complètement se déconnecter de Tor, vous devez redémarrer ZecWallet.</translation>
+        <source>Connection over Tor has been disabled. To fully disconnect from Tor, you need to restart AnonWallet.</source>
+        <translation>La connection via Tor a été désactivée. Afin de complètement se déconnecter de Tor, vous devez redémarrer AnonWallet.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="612"/>
-        <source>Thanks for supporting ZecWallet!</source>
-        <translation>Merci de supporter ZecWallet !</translation>
+        <source>Thanks for supporting AnonWallet!</source>
+        <translation>Merci de supporter AnonWallet !</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="614"/>
@@ -462,8 +462,8 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="614"/>
-        <source> to support ZecWallet</source>
-        <translation> pour supporter ZecWallet</translation>
+        <source> to support AnonWallet</source>
+        <translation> pour supporter AnonWallet</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="651"/>
@@ -493,28 +493,28 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="580"/>
-        <source>ZecWallet needs to restart to rescan/reindex. ZecWallet will now close, please restart ZecWallet to continue</source>
+        <source>AnonWallet needs to restart to rescan/reindex. AnonWallet will now close, please restart AnonWallet to continue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="582"/>
-        <source>Restart ZecWallet</source>
+        <source>Restart AnonWallet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="822"/>
-        <source>Error paying zcash URI</source>
-        <translation>Erreur lors du payement du URI zcash</translation>
+        <source>Error paying anon URI</source>
+        <translation>Erreur lors du payement du URI anon</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="823"/>
-        <source>URI should be of the form &apos;zcash:&lt;addr&gt;?amt=x&amp;memo=y</source>
-        <translation>Le format URI doit être comme suit: &apos;zcash:&lt;addr&gt;?amt=x&amp;memo=y</translation>
+        <source>URI should be of the form &apos;anon:&lt;addr&gt;?amt=x&amp;memo=y</source>
+        <translation>Le format URI doit être comme suit: &apos;anon:&lt;addr&gt;?amt=x&amp;memo=y</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="810"/>
-        <source>Paste Zcash URI</source>
-        <translation>Coller le URI Zcash</translation>
+        <source>Paste Anon URI</source>
+        <translation>Coller le URI Anon</translation>
     </message>
     <message>
         <source>Could not understand address</source>
@@ -531,8 +531,8 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="859"/>
-        <source>The keys will be imported into your connected zcashd node</source>
-        <translation>Les clef seront importées dans votre noeud zcashd connecté</translation>
+        <source>The keys will be imported into your connected anond node</source>
+        <translation>Les clef seront importées dans votre noeud anond connecté</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="899"/>
@@ -556,8 +556,8 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="923"/>
-        <source>You need to back it up from the machine zcashd is running on</source>
-        <translation>Vous devez effectuer la sauvegarde depuis la machine sur laquelle zcashd est en cours d&apos;exécution</translation>
+        <source>You need to back it up from the machine anond is running on</source>
+        <translation>Vous devez effectuer la sauvegarde depuis la machine sur laquelle anond est en cours d&apos;exécution</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="927"/>
@@ -783,17 +783,17 @@ Cette adresse ne semble pas être de type adresse-z</translation>
     </message>
     <message>
         <location filename="../src/mobileappconnector.ui" line="84"/>
-        <source>Allow connections over the internet via ZecWallet wormhole</source>
+        <source>Allow connections over the internet via AnonWallet wormhole</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/mobileappconnector.ui" line="36"/>
-        <source>Scan this QRCode from your ZecWallet companion app to connect your phone</source>
+        <source>Scan this QRCode from your AnonWallet companion app to connect your phone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/mobileappconnector.ui" line="94"/>
-        <source>ZecWallet Companion App</source>
+        <source>AnonWallet Companion App</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -835,53 +835,53 @@ Cette adresse ne semble pas être de type adresse-z</translation>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="52"/>
-        <source>Starting embedded zcashd</source>
-        <translation>Démarrage de zcashd intégré</translation>
+        <source>Starting embedded anond</source>
+        <translation>Démarrage de anond intégré</translation>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="62"/>
-        <source>zcashd is set to run as daemon</source>
-        <translation>zcashd est configuré pour s&apos;exécuter en tant que démon</translation>
+        <source>anond is set to run as daemon</source>
+        <translation>anond est configuré pour s&apos;exécuter en tant que démon</translation>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="62"/>
-        <source>Waiting for zcashd</source>
-        <translation>En attente de zcashd</translation>
+        <source>Waiting for anond</source>
+        <translation>En attente de anond</translation>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="77"/>
-        <source>You have zcashd set to start as a daemon, which can cause problems with ZecWallet
+        <source>You have anond set to start as a daemon, which can cause problems with AnonWallet
 
-.Please remove the following line from your zcash.conf and restart ZecWallet
+.Please remove the following line from your anon.conf and restart AnonWallet
 daemon=1</source>
-        <translation>vous avez zcashd configuré pour démarrer en tant que démon ce qui peut causer des problèmes avec ZecWallet
+        <translation>vous avez anond configuré pour démarrer en tant que démon ce qui peut causer des problèmes avec AnonWallet
 
- Veuillez enlever la ligne suivante de votre fichier &quot;zcash.conf&quot; et redémarrer ZecWallet:
+ Veuillez enlever la ligne suivante de votre fichier &quot;anon.conf&quot; et redémarrer AnonWallet:
 daemon=1</translation>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="82"/>
-        <source>Couldn&apos;t start the embedded zcashd.
+        <source>Couldn&apos;t start the embedded anond.
 
 Please try restarting.
 
-If you previously started zcashd with custom arguments, you might need to reset zcash.conf.
+If you previously started anond with custom arguments, you might need to reset anon.conf.
 
-If all else fails, please run zcashd manually.</source>
-        <translation>Impossible de démarrer le zcashd intégré.
+If all else fails, please run anond manually.</source>
+        <translation>Impossible de démarrer le anond intégré.
 
 Veuillez essayer de redémarrer.
 
-Si vous avez précédemment démarré zcashd avec des arguments, vous devrez peut-être réinitialiser le fichier zcash.conf.
+Si vous avez précédemment démarré anond avec des arguments, vous devrez peut-être réinitialiser le fichier anon.conf.
 
-Si tout échoue, exécutez zcashd manuellement.</translation>
+Si tout échoue, exécutez anond manuellement.</translation>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="93"/>
-        <source>Couldn&apos;t connect to zcashd configured in zcash.conf.
+        <source>Couldn&apos;t connect to anond configured in anon.conf.
 
-Not starting embedded zcashd because --no-embedded was passed</source>
-        <translation>Le démarrage de zcashd n&apos;a pas eu lieu car l&apos;argument --no-embedded a été utilisé au lancement</translation>
+Not starting embedded anond because --no-embedded was passed</source>
+        <translation>Le démarrage de anond n&apos;a pas eu lieu car l&apos;argument --no-embedded a été utilisé au lancement</translation>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="146"/>
@@ -961,18 +961,18 @@ Not starting embedded zcashd because --no-embedded was passed</source>
     </message>
     <message>
         <location filename="../src/rpc.cpp" line="649"/>
-        <source>Connected to zcashd</source>
-        <translation>Connecté à zcashd</translation>
+        <source>Connected to anond</source>
+        <translation>Connecté à anond</translation>
     </message>
     <message>
         <location filename="../src/rpc.cpp" line="652"/>
-        <source>zcashd has no peer connections</source>
-        <translation>zcashd n&apos;a aucune connexion à un pair</translation>
+        <source>anond has no peer connections</source>
+        <translation>anond n&apos;a aucune connexion à un pair</translation>
     </message>
     <message>
         <location filename="../src/rpc.cpp" line="671"/>
-        <source>There was an error connecting to zcashd. The error was</source>
-        <translation>Une erreur est survenue lors de la connection à zcashd. L&apos;erreur est</translation>
+        <source>There was an error connecting to anond. The error was</source>
+        <translation>Une erreur est survenue lors de la connection à anond. L&apos;erreur est</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="730"/>
@@ -1031,13 +1031,13 @@ Would you like to visit the releases page?</source>
     </message>
     <message>
         <location filename="../src/rpc.cpp" line="1119"/>
-        <source>Please wait for ZecWallet to exit</source>
-        <translation>Veuillez patienter. Fermeture de ZecWallet en cours</translation>
+        <source>Please wait for AnonWallet to exit</source>
+        <translation>Veuillez patienter. Fermeture de AnonWallet en cours</translation>
     </message>
     <message>
         <location filename="../src/rpc.cpp" line="1120"/>
-        <source>Waiting for zcashd to exit</source>
-        <translation>Attente de la fermeture de zcashd</translation>
+        <source>Waiting for anond to exit</source>
+        <translation>Attente de la fermeture de anond</translation>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="295"/>
@@ -1046,8 +1046,8 @@ Would you like to visit the releases page?</source>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="319"/>
-        <source>zcashd error</source>
-        <translation>erreur zcashd</translation>
+        <source>anond error</source>
+        <translation>erreur anond</translation>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="386"/>
@@ -1060,22 +1060,22 @@ Veuillez configurer l&apos;hôte/port et utilisateur/mot de passe dans le menu E
     </message>
     <message>
         <location filename="../src/connection.cpp" line="398"/>
-        <source>Could not connect to zcashd configured in settings.
+        <source>Could not connect to anond configured in settings.
 
 Please set the host/port and user/password in the Edit-&gt;Settings menu.</source>
-        <translation>Impossible de se connecter au zcashd configuré dans les préférences.
+        <translation>Impossible de se connecter au anond configuré dans les préférences.
 
 Veuillez configurer l&apos;hôte/port et utilisateur/mot de passe dans le menu Edition-&gt;Préférences.</translation>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="459"/>
-        <source>Authentication failed. The username / password you specified was not accepted by zcashd. Try changing it in the Edit-&gt;Settings menu</source>
-        <translation>Authentification échouée. Le nom d&apos;utilisateur / mot de passe que vous avez spécifié n&apos;a pas été accepté par zcashd. Essayez de le changer dans le menu Edition-&gt; Préférences</translation>
+        <source>Authentication failed. The username / password you specified was not accepted by anond. Try changing it in the Edit-&gt;Settings menu</source>
+        <translation>Authentification échouée. Le nom d&apos;utilisateur / mot de passe que vous avez spécifié n&apos;a pas été accepté par anond. Essayez de le changer dans le menu Edition-&gt; Préférences</translation>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="474"/>
-        <source>Your zcashd is starting up. Please wait.</source>
-        <translation>Votre zcashd est en cours de démarrage. Veuillez patienter.</translation>
+        <source>Your anond is starting up. Please wait.</source>
+        <translation>Votre anond est en cours de démarrage. Veuillez patienter.</translation>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="491"/>
@@ -1119,8 +1119,8 @@ Veuillez configurer l&apos;hôte/port et utilisateur/mot de passe dans le menu E
     </message>
     <message>
         <location filename="../src/addressbook.cpp" line="128"/>
-        <source> doesn&apos;t seem to be a valid Zcash address.</source>
-        <translation> ne semble pas être une adresse Zcash valide.</translation>
+        <source> doesn&apos;t seem to be a valid Anon address.</source>
+        <translation> ne semble pas être une adresse Anon valide.</translation>
     </message>
     <message>
         <location filename="../src/addressbook.cpp" line="138"/>
@@ -1206,7 +1206,7 @@ Vous avez soit des fonds non confirmés soit le solde est trop petit pour une mi
     </message>
     <message>
         <location filename="../src/websockets.cpp" line="359"/>
-        <source>Connected over the internet via ZecWallet wormhole service</source>
+        <source>Connected over the internet via AnonWallet wormhole service</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1302,18 +1302,18 @@ Vous avez soit des fonds non confirmés soit le solde est trop petit pour une mi
     </message>
     <message>
         <location filename="../src/requestdialog.ui" line="219"/>
-        <source>Request payment from a Sapling address. You&apos;ll send a ZEC 0.0001 transaction to the address with a zcash payment URI. The memo will be included in the transaction when the address pays you.</source>
+        <source>Request payment from a Sapling address. You&apos;ll send a ANON 0.0001 transaction to the address with a anon payment URI. The memo will be included in the transaction when the address pays you.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/requestdialog.cpp" line="50"/>
-        <source>Error paying zcash URI</source>
-        <translation type="unfinished">Erreur lors du payement du URI zcash</translation>
+        <source>Error paying anon URI</source>
+        <translation type="unfinished">Erreur lors du payement du URI anon</translation>
     </message>
     <message>
         <location filename="../src/requestdialog.cpp" line="51"/>
-        <source>URI should be of the form &apos;zcash:&lt;addr&gt;?amt=x&amp;memo=y</source>
-        <translation type="unfinished">Le format URI doit être comme suit: &apos;zcash:&lt;addr&gt;?amt=x&amp;memo=y</translation>
+        <source>URI should be of the form &apos;anon:&lt;addr&gt;?amt=x&amp;memo=y</source>
+        <translation type="unfinished">Le format URI doit être comme suit: &apos;anon:&lt;addr&gt;?amt=x&amp;memo=y</translation>
     </message>
     <message>
         <location filename="../src/requestdialog.cpp" line="65"/>
@@ -1345,8 +1345,8 @@ Vous avez soit des fonds non confirmés soit le solde est trop petit pour une mi
     </message>
     <message>
         <location filename="../src/settings.ui" line="33"/>
-        <source>zcashd connection</source>
-        <translation>connection zcashd</translation>
+        <source>anond connection</source>
+        <translation>connection anond</translation>
     </message>
     <message>
         <location filename="../src/settings.ui" line="62"/>
@@ -1400,7 +1400,7 @@ Vous avez soit des fonds non confirmés soit le solde est trop petit pour une mi
     </message>
     <message>
         <location filename="../src/settings.ui" line="287"/>
-        <source>Rescan the blockchain for any missing wallet transactions and to correct your wallet balance. This may take several hours. You need to restart ZecWallet for this to take effect</source>
+        <source>Rescan the blockchain for any missing wallet transactions and to correct your wallet balance. This may take several hours. You need to restart AnonWallet for this to take effect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1410,7 +1410,7 @@ Vous avez soit des fonds non confirmés soit le solde est trop petit pour une mi
     </message>
     <message>
         <location filename="../src/settings.ui" line="331"/>
-        <source>Rebuild the entire blockchain from the genesis block, by rescanning all the block files. This may take several hours to days, depending on your hardware. You need to restart ZecWallet for this to take effect</source>
+        <source>Rebuild the entire blockchain from the genesis block, by rescanning all the block files. This may take several hours to days, depending on your hardware. You need to restart AnonWallet for this to take effect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1581,8 +1581,8 @@ Vous avez soit des fonds non confirmés soit le solde est trop petit pour une mi
     </message>
     <message>
         <location filename="../src/confirm.ui" line="155"/>
-        <source>zcashd doesn&apos;t seem to have any peers. You might not be connected to the internet, so this Transaction might not work.</source>
-        <translation>zcashd semble n&apos;avoir aucune connexion à un autre pair. Comme vous n&apos;êtes peut-être pas connecté à Internet, cette transaction pourrait ne pas fonctionner.</translation>
+        <source>anond doesn&apos;t seem to have any peers. You might not be connected to the internet, so this Transaction might not work.</source>
+        <translation>anond semble n&apos;avoir aucune connexion à un autre pair. Comme vous n&apos;êtes peut-être pas connecté à Internet, cette transaction pourrait ne pas fonctionner.</translation>
     </message>
     <message>
         <location filename="../src/confirm.ui" line="168"/>
@@ -1596,44 +1596,44 @@ Vous avez soit des fonds non confirmés soit le solde est trop petit pour une mi
     </message>
 </context>
 <context>
-    <name>createZcashConf</name>
+    <name>createAnonConf</name>
     <message>
-        <location filename="../src/createzcashconfdialog.ui" line="14"/>
-        <source>Configure zcash.conf</source>
+        <location filename="../src/createanonconfdialog.ui" line="14"/>
+        <source>Configure anon.conf</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/createzcashconfdialog.ui" line="61"/>
+        <location filename="../src/createanonconfdialog.ui" line="61"/>
         <source>Show Advanced Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/createzcashconfdialog.ui" line="86"/>
-        <source>Your zcash node will be configured for you automatically</source>
+        <location filename="../src/createanonconfdialog.ui" line="86"/>
+        <source>Your anon node will be configured for you automatically</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/createzcashconfdialog.ui" line="102"/>
+        <location filename="../src/createanonconfdialog.ui" line="102"/>
         <source>Use custom datadir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/createzcashconfdialog.ui" line="109"/>
+        <location filename="../src/createanonconfdialog.ui" line="109"/>
         <source>Please choose a directory to store your wallet.dat and blockchain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/createzcashconfdialog.ui" line="118"/>
+        <location filename="../src/createanonconfdialog.ui" line="118"/>
         <source>Choose directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/createzcashconfdialog.ui" line="154"/>
+        <location filename="../src/createanonconfdialog.ui" line="154"/>
         <source>Connect over Tor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/createzcashconfdialog.ui" line="161"/>
+        <location filename="../src/createanonconfdialog.ui" line="161"/>
         <source>Please note that you&apos;ll need to already have a Tor service configured on port 9050</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1725,8 +1725,8 @@ Vous avez soit des fonds non confirmés soit le solde est trop petit pour une mi
     </message>
     <message>
         <location filename="../src/zboard.ui" line="85"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;ZBoard: Fully anonymous and untraceable chat messages based on the ZCash blockchain. &lt;a href=&quot;http://www.z-board.net/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.z-board.net/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Zboard: Messagerie entièrement anonyme et intraçable basée sur la blockchain ZCash.  &lt;a href=&quot;http://www.z-board.net/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.z-board.net/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;ZBoard: Fully anonymous and untraceable chat messages based on the Anon blockchain. &lt;a href=&quot;http://www.z-board.net/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.z-board.net/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Zboard: Messagerie entièrement anonyme et intraçable basée sur la blockchain Anon.  &lt;a href=&quot;http://www.z-board.net/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.z-board.net/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/zboard.ui" line="107"/>

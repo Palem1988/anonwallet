@@ -13,7 +13,7 @@ PRECOMPILED_HEADER = src/precompiled.h
 QT += widgets
 QT += websockets
 
-TARGET = zecwallet
+TARGET = anonwallet
 
 TEMPLATE = app
 
@@ -97,17 +97,17 @@ FORMS += \
     src/zboard.ui \
     src/addressbook.ui \
     src/mobileappconnector.ui \
-    src/createzcashconfdialog.ui \
+    src/createanonconfdialog.ui \
     src/recurringdialog.ui \
     src/newrecurring.ui \
     src/requestdialog.ui
 
 
-TRANSLATIONS = res/zec_qt_wallet_es.ts \
-               res/zec_qt_wallet_fr.ts \
-               res/zec_qt_wallet_de.ts \
-               res/zec_qt_wallet_pt.ts \
-               res/zec_qt_wallet_it.ts 
+TRANSLATIONS = res/anon_qt_wallet_es.ts \
+               res/anon_qt_wallet_fr.ts \
+               res/anon_qt_wallet_de.ts \
+               res/anon_qt_wallet_pt.ts \
+               res/anon_qt_wallet_it.ts 
 
 include(singleapplication/singleapplication.pri)
 DEFINES += QAPPLICATION_CLASS=QApplication

@@ -112,7 +112,7 @@ void WormholeClient::connect() {
     QObject::connect(m_webSocket, &QWebSocket::connected, this, &WormholeClient::onConnected);
     QObject::connect(m_webSocket, &QWebSocket::disconnected, this, &WormholeClient::closed);
 
-    m_webSocket->open(QUrl("wss://wormhole.zecqtwallet.com:443"));
+    m_webSocket->open(QUrl("wss://wormhole.anonqtwallet.com:443"));
     //m_webSocket->open(QUrl("ws://127.0.0.1:7070"));
 }
 
@@ -356,7 +356,7 @@ QString AppDataServer::connDesc(AppConnectionType t) {
         return QObject::tr("Connected directly");
     }
     else {
-        return QObject::tr("Connected over the internet via ZecWallet wormhole service");
+        return QObject::tr("Connected over the internet via AnonWallet wormhole service");
     }
 }
 
@@ -764,7 +764,7 @@ void AppDataServer::processGetInfo(QJsonObject jobj, MainWindow* mainWindow, std
         {"maxspendable", maxSpendable},
         {"maxzspendable", maxZSpendable},
         {"tokenName", Settings::getTokenName()},
-        {"zecprice", Settings::getInstance()->getZECPrice()},
+        {"anonprice", Settings::getInstance()->getANONPrice()},
         {"serverversion", QString(APP_VERSION)}
     }).toJson();
     pClient->sendTextMessage(encryptOutgoing(r));

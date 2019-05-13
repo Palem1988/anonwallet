@@ -9,13 +9,13 @@
         <file>res/icon.ico</file>
     </qresource>
     <qresource prefix="/img">
-        <file>res/zcashdlogo.gif</file>
+        <file>res/anondlogo.gif</file>
         <file>res/logobig.gif</file>
     </qresource>
     <qresource prefix="/translations">
-        <file>res/zec_qt_wallet_es.qm</file>
-        <file>res/zec_qt_wallet_fr.qm</file>
-        <file>res/zec_qt_wallet_pt.qm</file>
-        <file>res/zec_qt_wallet_it.qm</file>
+        <file>res/anon_qt_wallet_es.qm</file>
+        <file>res/anon_qt_wallet_fr.qm</file>
+        <file>res/anon_qt_wallet_pt.qm</file>
+        <file>res/anon_qt_wallet_it.qm</file>
     </qresource>
 </RCC>

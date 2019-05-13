@@ -40,8 +40,8 @@ public:
     bool    isSyncing();
     void    setSyncing(bool syncing);
 
-    int     getZcashdVersion();
-    void    setZcashdVersion(int version);
+    int     getAnondVersion();
+    void    setAnondVersion(int version);
     
     void    setUseEmbedded(bool r) { _useEmbedded = r; }
     bool    useEmbedded() { return _useEmbedded; }
@@ -63,11 +63,11 @@ public:
             
     bool    isSaplingActive();
 
-    void    setUsingZcashConf(QString confLocation);
-    const   QString& getZcashdConfLocation() { return _confLocation; }
+    void    setUsingAnonConf(QString confLocation);
+    const   QString& getAnondConfLocation() { return _confLocation; }
 
-    void    setZECPrice(double p) { zecPrice = p; }
-    double  getZECPrice();
+    void    setANONPrice(double p) { anonPrice = p; }
+    double  getANONPrice();
 
     void    setPeers(int peers);
     int     getPeers();
@@ -85,8 +85,8 @@ public:
 
     static QString getDecimalString(double amt);
     static QString getUSDFormat(double bal);
-    static QString getZECDisplayFormat(double bal);
-    static QString getZECUSDDisplayFormat(double bal);
+    static QString getANONDisplayFormat(double bal);
+    static QString getANONUSDDisplayFormat(double bal);
 
     static QString getTokenName();
     static QString getDonationAddr(bool sapling);
@@ -99,8 +99,8 @@ public:
     
     static bool    isValidAddress(QString addr);
 
-    static bool    addToZcashConf(QString confLocation, QString line);
-    static bool    removeFromZcashConf(QString confLocation, QString option);
+    static bool    addToAnonConf(QString confLocation, QString line);
+    static bool    removeFromAnonConf(QString confLocation, QString option);
 
     static const QString labelRegExp;
 
@@ -120,12 +120,12 @@ private:
     bool    _isTestnet        = false;
     bool    _isSyncing        = false;
     int     _blockNumber      = 0;
-    int     _zcashdVersion    = 0;
+    int     _anondVersion    = 0;
     bool    _useEmbedded      = false;
     bool    _headless         = false;
     int     _peerConnections  = 0;
     
-    double  zecPrice          = 0.0;
+    double  anonPrice          = 0.0;
 };
 
 #endif // SETTINGS_H

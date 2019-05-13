@@ -2,7 +2,7 @@
 #include "mainwindow.h"
 #include "settings.h"
 #include "ui_connection.h"
-#include "ui_createzcashconfdialog.h"
+#include "ui_createanonconfdialog.h"
 #include "rpc.h"
 
 #include "precompiled.h"
@@ -31,74 +31,74 @@ void ConnectionLoader::loadConnection() {
         d->exec();
 }
 
-void ConnectionLoader::doAutoConnect(bool tryEzcashdStart) {
+void ConnectionLoader::doAutoConnect(bool tryEanondStart) {
     // Priority 1: Ensure all params are present.
     if (!verifyParams()) {
         downloadParams([=]() { this->doAutoConnect(); });
         return;
     }
 
-    // Priority 2: Try to connect to detect zcash.conf and connect to it.
-    auto config = autoDetectZcashConf();
+    // Priority 2: Try to connect to detect anon.conf and connect to it.
+    auto config = autoDetectAnonConf();
     main->logger->write(QObject::tr("Attempting autoconnect"));
 
     if (config.get() != nullptr) {
         auto connection = makeConnection(config);
 
-        refreshZcashdState(connection, [=] () {
-            // Refused connection. So try and start embedded zcashd
+        refreshAnondState(connection, [=] () {
+            // Refused connection. So try and start embedded anond
             if (Settings::getInstance()->useEmbedded()) {
-                if (tryEzcashdStart) {
-                    this->showInformation(QObject::tr("Starting embedded zcashd"));
-                    if (this->startEmbeddedZcashd()) {
-                        // Embedded zcashd started up. Wait a second and then refresh the connection
-                        main->logger->write("Embedded zcashd started up, trying autoconnect in 1 sec");
+                if (tryEanondStart) {
+                    this->showInformation(QObject::tr("Starting embedded anond"));
+                    if (this->startEmbeddedAnond()) {
+                        // Embedded anond started up. Wait a second and then refresh the connection
+                        main->logger->write("Embedded anond started up, trying autoconnect in 1 sec");
                         QTimer::singleShot(1000, [=]() { doAutoConnect(); } );
                     } else {
-                        if (config->zcashDaemon) {
-                            // zcashd is configured to run as a daemon, so we must wait for a few seconds
+                        if (config->anonDaemon) {
+                            // anond is configured to run as a daemon, so we must wait for a few seconds
                             // to let it start up. 
-                            main->logger->write("zcashd is daemon=1. Waiting for it to start up");
-                            this->showInformation(QObject::tr("zcashd is set to run as daemon"), QObject::tr("Waiting for zcashd"));
-                            QTimer::singleShot(5000, [=]() { doAutoConnect(/* don't attempt to start ezcashd */ false); });
+                            main->logger->write("anond is daemon=1. Waiting for it to start up");
+                            this->showInformation(QObject::tr("anond is set to run as daemon"), QObject::tr("Waiting for anond"));
+                            QTimer::singleShot(5000, [=]() { doAutoConnect(/* don't attempt to start eanond */ false); });
                         } else {
                             // Something is wrong. 
                             // We're going to attempt to connect to the one in the background one last time
                             // and see if that works, else throw an error
-                            main->logger->write("Unknown problem while trying to start zcashd");
-                            QTimer::singleShot(2000, [=]() { doAutoConnect(/* don't attempt to start ezcashd */ false); });
+                            main->logger->write("Unknown problem while trying to start anond");
+                            QTimer::singleShot(2000, [=]() { doAutoConnect(/* don't attempt to start eanond */ false); });
                         }
                     }
                 } else {
-                    // We tried to start ezcashd previously, and it didn't work. So, show the error. 
-                    main->logger->write("Couldn't start embedded zcashd for unknown reason");
+                    // We tried to start eanond previously, and it didn't work. So, show the error. 
+                    main->logger->write("Couldn't start embedded anond for unknown reason");
                     QString explanation;
-                    if (config->zcashDaemon) {
-                        explanation = QString() % QObject::tr("You have zcashd set to start as a daemon, which can cause problems "
-                            "with ZecWallet\n\n."
-                            "Please remove the following line from your zcash.conf and restart ZecWallet\n"
+                    if (config->anonDaemon) {
+                        explanation = QString() % QObject::tr("You have anond set to start as a daemon, which can cause problems "
+                            "with AnonWallet\n\n."
+                            "Please remove the following line from your anon.conf and restart AnonWallet\n"
                             "daemon=1");
                     } else {
-                        explanation = QString() % QObject::tr("Couldn't start the embedded zcashd.\n\n" 
-                            "Please try restarting.\n\nIf you previously started zcashd with custom arguments, you might need to reset zcash.conf.\n\n" 
-                            "If all else fails, please run zcashd manually.") %  
-                            (ezcashd ? QObject::tr("The process returned") + ":\n\n" % ezcashd->errorString() : QString(""));
+                        explanation = QString() % QObject::tr("Couldn't start the embedded anond.\n\n" 
+                            "Please try restarting.\n\nIf you previously started anond with custom arguments, you might need to reset anon.conf.\n\n" 
+                            "If all else fails, please run anond manually.") %  
+                            (eanond ? QObject::tr("The process returned") + ":\n\n" % eanond->errorString() : QString(""));
                     }
                     
                     this->showError(explanation);
                 }                
             } else {
-                // zcash.conf exists, there's no connection, and the user asked us not to start zcashd. Error!
-                main->logger->write("Not using embedded and couldn't connect to zcashd");
-                QString explanation = QString() % QObject::tr("Couldn't connect to zcashd configured in zcash.conf.\n\n" 
-                                      "Not starting embedded zcashd because --no-embedded was passed");
+                // anon.conf exists, there's no connection, and the user asked us not to start anond. Error!
+                main->logger->write("Not using embedded and couldn't connect to anond");
+                QString explanation = QString() % QObject::tr("Couldn't connect to anond configured in anon.conf.\n\n" 
+                                      "Not starting embedded anond because --no-embedded was passed");
                 this->showError(explanation);
             }
         });
     } else {
         if (Settings::getInstance()->useEmbedded()) {
-            // zcash.conf was not found, so create one
-            createZcashConf();
+            // anon.conf was not found, so create one
+            createAnonConf();
         } else {
             // Fall back to manual connect
             doManualConnect();
@@ -124,19 +124,19 @@ QString randomPassword() {
 }
 
 /**
- * This will create a new zcash.conf, download Zcash parameters.
+ * This will create a new anon.conf, download Anon parameters.
  */ 
-void ConnectionLoader::createZcashConf() {
-    main->logger->write("createZcashConf");
+void ConnectionLoader::createAnonConf() {
+    main->logger->write("createAnonConf");
 
-    auto confLocation = zcashConfWritableLocation();
+    auto confLocation = anonConfWritableLocation();
     QFileInfo fi(confLocation);
 
     QDialog d(main);
-    Ui_createZcashConf ui;
+    Ui_createAnonConf ui;
     ui.setupUi(&d);
 
-    QPixmap logo(":/img/res/zcashdlogo.gif");
+    QPixmap logo(":/img/res/anondlogo.gif");
     ui.lblTopIcon->setBasePixmap(logo.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     ui.btnPickDir->setEnabled(false);
 
@@ -175,7 +175,7 @@ void ConnectionLoader::createZcashConf() {
 
     QFile file(confLocation);
     if (!file.open(QIODevice::ReadWrite | QIODevice::Truncate)) {
-        main->logger->write("Could not create zcash.conf, returning");
+        main->logger->write("Could not create anon.conf, returning");
         return;
     }
         
@@ -183,7 +183,7 @@ void ConnectionLoader::createZcashConf() {
     
     out << "server=1\n";
     out << "addnode=mainnet.z.cash\n";
-    out << "rpcuser=zec-qt-wallet\n";
+    out << "rpcuser=anon-qt-wallet\n";
     out << "rpcpassword=" % randomPassword() << "\n";
     if (!datadir.isEmpty()) {
         out << "datadir=" % datadir % "\n";
@@ -194,7 +194,7 @@ void ConnectionLoader::createZcashConf() {
 
     file.close();
 
-    // Now that zcash.conf exists, try to autoconnect again
+    // Now that anon.conf exists, try to autoconnect again
     this->doAutoConnect();
 }
 
@@ -236,7 +236,7 @@ void ConnectionLoader::doNextDownload(std::function<void(void)> cb) {
     int filesRemaining = downloadQueue->size();
 
     QString filename = fnSaveFileName(url);
-    QString paramsDir = zcashParamsDir();
+    QString paramsDir = anonParamsDir();
 
     if (QFile(QDir(paramsDir).filePath(filename)).exists()) {
         main->logger->write(filename + " already exists, skipping");
@@ -304,19 +304,19 @@ void ConnectionLoader::doNextDownload(std::function<void(void)> cb) {
     });    
 }
 
-bool ConnectionLoader::startEmbeddedZcashd() {
+bool ConnectionLoader::startEmbeddedAnond() {
     if (!Settings::getInstance()->useEmbedded()) 
         return false;
     
-    main->logger->write("Trying to start embedded zcashd");
+    main->logger->write("Trying to start embedded anond");
 
     // Static because it needs to survive even after this method returns.
     static QString processStdErrOutput;
 
-    if (ezcashd != nullptr) {
-        if (ezcashd->state() == QProcess::NotRunning) {
+    if (eanond != nullptr) {
+        if (eanond->state() == QProcess::NotRunning) {
             if (!processStdErrOutput.isEmpty()) {
-                QMessageBox::critical(main, QObject::tr("zcashd error"), "zcashd said: " + processStdErrOutput, 
+                QMessageBox::critical(main, QObject::tr("anond error"), "anond said: " + processStdErrOutput, 
                                       QMessageBox::Ok);
             }
             return false;
@@ -325,52 +325,52 @@ bool ConnectionLoader::startEmbeddedZcashd() {
         }        
     }
 
-    // Finally, start zcashd    
+    // Finally, start anond    
     QDir appPath(QCoreApplication::applicationDirPath());
 #ifdef Q_OS_LINUX
-    auto zcashdProgram = appPath.absoluteFilePath("zqw-zcashd");
-    if (!QFile(zcashdProgram).exists()) {
-        zcashdProgram = appPath.absoluteFilePath("zcashd");
+    auto anondProgram = appPath.absoluteFilePath("zqw-anond");
+    if (!QFile(anondProgram).exists()) {
+        anondProgram = appPath.absoluteFilePath("anond");
     }
 #elif defined(Q_OS_DARWIN)
-    auto zcashdProgram = appPath.absoluteFilePath("zcashd");
+    auto anondProgram = appPath.absoluteFilePath("anond");
 #else
-    auto zcashdProgram = appPath.absoluteFilePath("zcashd.exe");
+    auto anondProgram = appPath.absoluteFilePath("anond.exe");
 #endif
     
-    if (!QFile(zcashdProgram).exists()) {
-        qDebug() << "Can't find zcashd at " << zcashdProgram;
-        main->logger->write("Can't find zcashd at " + zcashdProgram); 
+    if (!QFile(anondProgram).exists()) {
+        qDebug() << "Can't find anond at " << anondProgram;
+        main->logger->write("Can't find anond at " + anondProgram); 
         return false;
     }
 
-    ezcashd = new QProcess(main);    
-    QObject::connect(ezcashd, &QProcess::started, [=] () {
-        //qDebug() << "zcashd started";
+    eanond = new QProcess(main);    
+    QObject::connect(eanond, &QProcess::started, [=] () {
+        //qDebug() << "anond started";
     });
 
-    QObject::connect(ezcashd, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+    QObject::connect(eanond, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
                         [=](int, QProcess::ExitStatus) {
-        //qDebug() << "zcashd finished with code " << exitCode << "," << exitStatus;    
+        //qDebug() << "anond finished with code " << exitCode << "," << exitStatus;    
     });
 
-    QObject::connect(ezcashd, &QProcess::errorOccurred, [&] (auto) {
-        //qDebug() << "Couldn't start zcashd: " << error;
+    QObject::connect(eanond, &QProcess::errorOccurred, [&] (auto) {
+        //qDebug() << "Couldn't start anond: " << error;
     });
 
-    QObject::connect(ezcashd, &QProcess::readyReadStandardError, [=]() {
-        auto output = ezcashd->readAllStandardError();
-       main->logger->write("zcashd stderr:" + output);
+    QObject::connect(eanond, &QProcess::readyReadStandardError, [=]() {
+        auto output = eanond->readAllStandardError();
+       main->logger->write("anond stderr:" + output);
         processStdErrOutput.append(output);
     });
 
 #ifdef Q_OS_LINUX
-    ezcashd->start(zcashdProgram);
+    eanond->start(anondProgram);
 #elif defined(Q_OS_DARWIN)
-    ezcashd->start(zcashdProgram);
+    eanond->start(anondProgram);
 #else
-    ezcashd->setWorkingDirectory(appPath.absolutePath());
-    ezcashd->start("zcashd.exe");
+    eanond->setWorkingDirectory(appPath.absolutePath());
+    eanond->start("anond.exe");
 #endif // Q_OS_LINUX
 
 
@@ -393,9 +393,9 @@ void ConnectionLoader::doManualConnect() {
     }
 
     auto connection = makeConnection(config);
-    refreshZcashdState(connection, [=] () {
+    refreshAnondState(connection, [=] () {
         QString explanation = QString()
-                % QObject::tr("Could not connect to zcashd configured in settings.\n\n" 
+                % QObject::tr("Could not connect to anond configured in settings.\n\n" 
                 "Please set the host/port and user/password in the Edit->Settings menu.");
 
         showError(explanation);
@@ -406,7 +406,7 @@ void ConnectionLoader::doManualConnect() {
 }
 
 void ConnectionLoader::doRPCSetConnection(Connection* conn) {
-    rpc->setEZcashd(ezcashd);
+    rpc->setEAnond(eanond);
     rpc->setConnection(conn);
     
     d->accept();
@@ -433,7 +433,7 @@ Connection* ConnectionLoader::makeConnection(std::shared_ptr<ConnectionConfig> c
     return new Connection(main, client, request, config);
 }
 
-void ConnectionLoader::refreshZcashdState(Connection* connection, std::function<void(void)> refused) {
+void ConnectionLoader::refreshAnondState(Connection* connection, std::function<void(void)> refused) {
     json payload = {
         {"jsonrpc", "1.0"},
         {"id", "someid"},
@@ -443,7 +443,7 @@ void ConnectionLoader::refreshZcashdState(Connection* connection, std::function<
         [=] (auto) {
             // Success, hide the dialog if it was shown. 
             d->hide();
-            main->logger->write("zcashd is online.");
+            main->logger->write("anond is online.");
             this->doRPCSetConnection(connection);
         },
         [=] (auto reply, auto res) {            
@@ -457,7 +457,7 @@ void ConnectionLoader::refreshZcashdState(Connection* connection, std::function<
                 main->logger->write("Authentication failed");
                 QString explanation = QString() % 
                         QObject::tr("Authentication failed. The username / password you specified was "
-                        "not accepted by zcashd. Try changing it in the Edit->Settings menu");
+                        "not accepted by anond. Try changing it in the Edit->Settings menu");
 
                 this->showError(explanation);
             } else if (err == QNetworkReply::NetworkError::InternalServerError && 
@@ -471,10 +471,10 @@ void ConnectionLoader::refreshZcashdState(Connection* connection, std::function<
                     if (dots > 3)
                         dots = 0;
                 }
-                this->showInformation(QObject::tr("Your zcashd is starting up. Please wait."), status);
-                main->logger->write("Waiting for zcashd to come online.");
+                this->showInformation(QObject::tr("Your anond is starting up. Please wait."), status);
+                main->logger->write("Waiting for anond to come online.");
                 // Refresh after one second
-                QTimer::singleShot(1000, [=]() { this->refreshZcashdState(connection, refused); });
+                QTimer::singleShot(1000, [=]() { this->refreshAnondState(connection, refused); });
             }
         }
     );
@@ -502,46 +502,46 @@ void ConnectionLoader::showInformation(QString info, QString detail) {
  * Show error will close the loading dialog and show an error. 
 */
 void ConnectionLoader::showError(QString explanation) {    
-    rpc->setEZcashd(nullptr);
+    rpc->setEAnond(nullptr);
     rpc->noConnection();
 
     QMessageBox::critical(main, QObject::tr("Connection Error"), explanation, QMessageBox::Ok);
     d->close();
 }
 
-QString ConnectionLoader::locateZcashConfFile() {
+QString ConnectionLoader::locateAnonConfFile() {
 #ifdef Q_OS_LINUX
-    auto confLocation = QStandardPaths::locate(QStandardPaths::HomeLocation, ".zcash/zcash.conf");
+    auto confLocation = QStandardPaths::locate(QStandardPaths::HomeLocation, ".anon/anon.conf");
 #elif defined(Q_OS_DARWIN)
-    auto confLocation = QStandardPaths::locate(QStandardPaths::HomeLocation, "Library/Application Support/Zcash/zcash.conf");
+    auto confLocation = QStandardPaths::locate(QStandardPaths::HomeLocation, "Library/Application Support/Anon/anon.conf");
 #else
-    auto confLocation = QStandardPaths::locate(QStandardPaths::AppDataLocation, "../../Zcash/zcash.conf");
+    auto confLocation = QStandardPaths::locate(QStandardPaths::AppDataLocation, "../../Anon/anon.conf");
 #endif
 
-    main->logger->write("Found zcashconf at " + QDir::cleanPath(confLocation));
+    main->logger->write("Found anonconf at " + QDir::cleanPath(confLocation));
     return QDir::cleanPath(confLocation);
 }
 
-QString ConnectionLoader::zcashConfWritableLocation() {
+QString ConnectionLoader::anonConfWritableLocation() {
 #ifdef Q_OS_LINUX
-    auto confLocation = QDir(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).filePath(".zcash/zcash.conf");
+    auto confLocation = QDir(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).filePath(".anon/anon.conf");
 #elif defined(Q_OS_DARWIN)
-    auto confLocation = QDir(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).filePath("Library/Application Support/Zcash/zcash.conf");
+    auto confLocation = QDir(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).filePath("Library/Application Support/Anon/anon.conf");
 #else
-    auto confLocation = QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("../../Zcash/zcash.conf");
+    auto confLocation = QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("../../Anon/anon.conf");
 #endif
 
-    main->logger->write("Found zcashconf at " + QDir::cleanPath(confLocation));
+    main->logger->write("Found anonconf at " + QDir::cleanPath(confLocation));
     return QDir::cleanPath(confLocation);
 }
 
-QString ConnectionLoader::zcashParamsDir() {
+QString ConnectionLoader::anonParamsDir() {
     #ifdef Q_OS_LINUX
     auto paramsLocation = QDir(QDir(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).filePath(".zcash-params"));
 #elif defined(Q_OS_DARWIN)
-    auto paramsLocation = QDir(QDir(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).filePath("Library/Application Support/ZcashParams"));
+    auto paramsLocation = QDir(QDir(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).filePath("Library/Application Support/AnonParams"));
 #else
-    auto paramsLocation = QDir(QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("../../ZcashParams"));
+    auto paramsLocation = QDir(QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("../../AnonParams"));
 #endif
 
     if (!paramsLocation.exists()) {
@@ -549,12 +549,12 @@ QString ConnectionLoader::zcashParamsDir() {
         QDir().mkpath(paramsLocation.absolutePath());
     }
 
-    main->logger->write("Found Zcash params directory at " + paramsLocation.absolutePath());
+    main->logger->write("Found Anon params directory at " + paramsLocation.absolutePath());
     return paramsLocation.absolutePath();
 }
 
 bool ConnectionLoader::verifyParams() {
-    QDir paramsDir(zcashParamsDir());
+    QDir paramsDir(anonParamsDir());
 
     if (!QFile(paramsDir.filePath("sapling-output.params")).exists()) return false;
     if (!QFile(paramsDir.filePath("sapling-spend.params")).exists()) return false;
@@ -566,17 +566,17 @@ bool ConnectionLoader::verifyParams() {
 }
 
 /**
- * Try to automatically detect a zcash.conf file in the correct location and load parameters
+ * Try to automatically detect a anon.conf file in the correct location and load parameters
  */ 
-std::shared_ptr<ConnectionConfig> ConnectionLoader::autoDetectZcashConf() {    
-    auto confLocation = Settings::getInstance()->getZcashdConfLocation();
+std::shared_ptr<ConnectionConfig> ConnectionLoader::autoDetectAnonConf() {    
+    auto confLocation = Settings::getInstance()->getAnondConfLocation();
 
     if (confLocation.isEmpty()) {
-        confLocation = locateZcashConfFile();
+        confLocation = locateAnonConfFile();
     }
 
     if (confLocation.isNull()) {
-        // No Zcash file, just return with nothing
+        // No Anon file, just return with nothing
         return nullptr;
     }
 
@@ -588,14 +588,14 @@ std::shared_ptr<ConnectionConfig> ConnectionLoader::autoDetectZcashConf() {
 
     QTextStream in(&file);
 
-    auto zcashconf = new ConnectionConfig();
-    zcashconf->host     = "127.0.0.1";
-    zcashconf->connType = ConnectionType::DetectedConfExternalZcashD;
-    zcashconf->usingZcashConf = true;
-    zcashconf->zcashDir = QFileInfo(confLocation).absoluteDir().absolutePath();
-    zcashconf->zcashDaemon = false;
+    auto anonconf = new ConnectionConfig();
+    anonconf->host     = "127.0.0.1";
+    anonconf->connType = ConnectionType::DetectedConfExternalAnonD;
+    anonconf->usingAnonConf = true;
+    anonconf->anonDir = QFileInfo(confLocation).absoluteDir().absolutePath();
+    anonconf->anonDaemon = false;
 
-    Settings::getInstance()->setUsingZcashConf(confLocation);
+    Settings::getInstance()->setUsingAnonConf(confLocation);
 
     while (!in.atEnd()) {
         QString line = in.readLine();
@@ -604,38 +604,38 @@ std::shared_ptr<ConnectionConfig> ConnectionLoader::autoDetectZcashConf() {
         QString value = line.right(line.length() - s - 1).trimmed();
 
         if (name == "rpcuser") {
-            zcashconf->rpcuser = value;
+            anonconf->rpcuser = value;
         }
         if (name == "rpcpassword") {
-            zcashconf->rpcpassword = value;
+            anonconf->rpcpassword = value;
         }
         if (name == "rpcport") {
-            zcashconf->port = value;
+            anonconf->port = value;
         }
         if (name == "daemon" && value == "1") {
-            zcashconf->zcashDaemon = true;
+            anonconf->anonDaemon = true;
         }
         if (name == "proxy") {
-            zcashconf->proxy = value;
+            anonconf->proxy = value;
         }
         if (name == "testnet" &&
             value == "1"  &&
-            zcashconf->port.isEmpty()) {
-                zcashconf->port = "18232";
+            anonconf->port.isEmpty()) {
+                anonconf->port = "3127";
         }
     }
 
     // If rpcport is not in the file, and it was not set by the testnet=1 flag, then go to default
-    if (zcashconf->port.isEmpty()) zcashconf->port = "8232";
+    if (anonconf->port.isEmpty()) anonconf->port = "3130";
     file.close();
 
-    // In addition to the zcash.conf file, also double check the params. 
+    // In addition to the anon.conf file, also double check the params. 
 
-    return std::shared_ptr<ConnectionConfig>(zcashconf);
+    return std::shared_ptr<ConnectionConfig>(anonconf);
 }
 
 /**
- * Load connection settings from the UI, which indicates an unknown, external zcashd
+ * Load connection settings from the UI, which indicates an unknown, external anond
  */ 
 std::shared_ptr<ConnectionConfig> ConnectionLoader::loadFromSettings() {
     // Load from the QT Settings. 
@@ -649,7 +649,7 @@ std::shared_ptr<ConnectionConfig> ConnectionLoader::loadFromSettings() {
     if (username.isEmpty() || password.isEmpty())
         return nullptr;
 
-    auto uiConfig = new ConnectionConfig{ host, port, username, password, false, false, "", "", ConnectionType::UISettingsZCashD};
+    auto uiConfig = new ConnectionConfig{ host, port, username, password, false, false, "", "", ConnectionType::UISettingsAnonD};
 
     return std::shared_ptr<ConnectionConfig>(uiConfig);
 }

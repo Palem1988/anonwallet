@@ -148,28 +148,28 @@ public:
 
         // Command line parser
         QCommandLineParser parser;
-        parser.setApplicationDescription("Shielded desktop wallet and embedded full node for Zcash");
+        parser.setApplicationDescription("Shielded desktop wallet and embedded full node for Anon");
         parser.addHelpOption();
 
         // A boolean option for running it headless
         QCommandLineOption headlessOption(QStringList() << "headless", "Running it via GUI.");
         parser.addOption(headlessOption);
 
-        // No embedded will disable the embedded zcashd node
-        QCommandLineOption noembeddedOption(QStringList() << "no-embedded", "Disable embedded zcashd");
+        // No embedded will disable the embedded anond node
+        QCommandLineOption noembeddedOption(QStringList() << "no-embedded", "Disable embedded anond");
         parser.addOption(noembeddedOption);
 
         // Add an option to specify the conf file
-            QCommandLineOption confOption(QStringList() << "conf", "Use the zcash.conf specified instead of looking for the default one.",
+            QCommandLineOption confOption(QStringList() << "conf", "Use the anon.conf specified instead of looking for the default one.",
                                           "confFile");
         parser.addOption(confOption);
 
-        // Positional argument will specify a zcash payment URI
-        parser.addPositionalArgument("zcashURI", "An optional zcash URI to pay");
+        // Positional argument will specify a anon payment URI
+        parser.addPositionalArgument("anonURI", "An optional anon URI to pay");
 
         parser.process(a);
 
-        // Check for a positional argument indicating a zcash payment URI
+        // Check for a positional argument indicating a anon payment URI
         if (a.isSecondary()) {
             if (parser.positionalArguments().length() > 0) {
                 a.sendMessage(parser.positionalArguments()[0].toUtf8());    
@@ -178,15 +178,15 @@ public:
             return 0;            
         } 
 
-        QCoreApplication::setOrganizationName("zec-qt-wallet-org");
-        QCoreApplication::setApplicationName("zec-qt-wallet");
+        QCoreApplication::setOrganizationName("anon-qt-wallet-org");
+        QCoreApplication::setApplicationName("anon-qt-wallet");
 
         QString locale = QLocale::system().name();
         locale.truncate(locale.lastIndexOf('_'));   // Get the language code
         qDebug() << "Loading locale " << locale;
         
         QTranslator translator;
-        translator.load(QString(":/translations/res/zec_qt_wallet_") + locale);
+        translator.load(QString(":/translations/res/anon_qt_wallet_") + locale);
         a.installTranslator(&translator);
 
         QIcon icon(":/icons/res/icon.ico");
@@ -224,23 +224,23 @@ public:
 
         // Check to see if a conf location was specified
         if (parser.isSet(confOption)) {
-            Settings::getInstance()->setUsingZcashConf(parser.value(confOption));
+            Settings::getInstance()->setUsingAnonConf(parser.value(confOption));
         }
 
         w = new MainWindow();
-        w->setWindowTitle("ZecWallet v" + QString(APP_VERSION));
+        w->setWindowTitle("AnonWallet v" + QString(APP_VERSION));
 
         // If there was a payment URI on the command line, pay it
         if (parser.positionalArguments().length() > 0) {
-            w->payZcashURI(parser.positionalArguments()[0]);
+            w->payAnonURI(parser.positionalArguments()[0]);
         }
 
-        // Listen for any secondary instances telling us about a zcash payment URI
+        // Listen for any secondary instances telling us about a anon payment URI
         QObject::connect(&a, &SingleApplication::receivedMessage, [=] (quint32, QByteArray msg) {
             QString uri(msg);
 
             // We need to execute this async, otherwise the app seems to crash for some reason.
-            QTimer::singleShot(1, [=]() { w->payZcashURI(uri); });            
+            QTimer::singleShot(1, [=]() { w->payAnonURI(uri); });            
         });   
 
         // For MacOS, we have an event filter

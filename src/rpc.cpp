@@ -32,7 +32,7 @@ RPC::RPC(MainWindow* main) {
     // Set up timer to refresh Price
     priceTimer = new QTimer(main);
     QObject::connect(priceTimer, &QTimer::timeout, [=]() {
-        refreshZECPrice();
+        refreshANONPrice();
     });
     priceTimer->start(Settings::priceRefreshSpeed);  // Every hour
 
@@ -71,15 +71,15 @@ RPC::~RPC() {
     delete conn;
 }
 
-void RPC::setEZcashd(QProcess* p) {
-    ezcashd = p;
+void RPC::setEAnond(QProcess* p) {
+    eanond = p;
 
-    if (ezcashd && ui->tabWidget->widget(4) == nullptr) {
-        ui->tabWidget->addTab(main->zcashdtab, "zcashd");
+    if (eanond && ui->tabWidget->widget(4) == nullptr) {
+        ui->tabWidget->addTab(main->anondtab, "anond");
     }
 }
 
-// Called when a connection to zcashd is available. 
+// Called when a connection to anond is available. 
 void RPC::setConnection(Connection* c) {
     if (c == nullptr) return;
 
@@ -88,13 +88,13 @@ void RPC::setConnection(Connection* c) {
 
     ui->statusBar->showMessage("Ready!");
 
-    // See if we need to remove the reindex/rescan flags from the zcash.conf file
-    auto zcashConfLocation = Settings::getInstance()->getZcashdConfLocation();
-    Settings::removeFromZcashConf(zcashConfLocation, "rescan");
-    Settings::removeFromZcashConf(zcashConfLocation, "reindex");
+    // See if we need to remove the reindex/rescan flags from the anon.conf file
+    auto anonConfLocation = Settings::getInstance()->getAnondConfLocation();
+    Settings::removeFromAnonConf(anonConfLocation, "rescan");
+    Settings::removeFromAnonConf(anonConfLocation, "reindex");
 
     // Refresh the UI
-    refreshZECPrice();    
+    refreshANONPrice();    
     checkForUpdate();
 
     // Force update, because this might be coming from a settings update
@@ -517,7 +517,7 @@ void RPC::refreshReceivedZTrans(QList<QString> zaddrs) {
     );
 } 
 
-/// This will refresh all the balance data from zcashd
+/// This will refresh all the balance data from anond
 void RPC::refresh(bool force) {
     if  (conn == nullptr) 
         return noConnection();
@@ -551,7 +551,7 @@ void RPC::getInfoThenRefresh(bool force) {
         static int    lastBlock = 0;
         int curBlock  = reply["blocks"].get<json::number_integer_t>();
         int version = reply["version"].get<json::number_integer_t>();
-        Settings::getInstance()->setZcashdVersion(version);
+        Settings::getInstance()->setAnondVersion(version);
 
         if ( force || (curBlock != lastBlock) ) {
             // Something changed, so refresh everything.
@@ -575,7 +575,7 @@ void RPC::getInfoThenRefresh(bool force) {
         }
 
         // Get network sol/s
-        if (ezcashd) {
+        if (eanond) {
             json payload = {
                 {"jsonrpc", "1.0"},
                 {"id", "someid"},
@@ -610,8 +610,8 @@ void RPC::getInfoThenRefresh(bool force) {
             Settings::getInstance()->setSyncing(isSyncing);
             Settings::getInstance()->setBlockNumber(blockNumber);
 
-            // Update zcashd tab if it exists
-            if (ezcashd) {
+            // Update anond tab if it exists
+            if (eanond) {
                 if (isSyncing) {
                     QString txt = QString::number(blockNumber);
                     if (estimatedheight > 0) {
@@ -643,32 +643,32 @@ void RPC::getInfoThenRefresh(bool force) {
             ui->lblSyncWarning->setVisible(isSyncing);
             ui->lblSyncWarningReceive->setVisible(isSyncing);
 
-            auto zecPrice = Settings::getUSDFormat(1);
+            auto anonPrice = Settings::getUSDFormat(1);
             QString tooltip;
             if (connections > 0) {
-                tooltip = QObject::tr("Connected to zcashd");
+                tooltip = QObject::tr("Connected to anond");
             }
             else {
-                tooltip = QObject::tr("zcashd has no peer connections");
+                tooltip = QObject::tr("anond has no peer connections");
             }
-            tooltip = tooltip % "(v " % QString::number(Settings::getInstance()->getZcashdVersion()) % ")";
+            tooltip = tooltip % "(v " % QString::number(Settings::getInstance()->getAnondVersion()) % ")";
 
-            if (!zecPrice.isEmpty()) {
-                tooltip = "1 ZEC = " % zecPrice % "\n" % tooltip;
+            if (!anonPrice.isEmpty()) {
+                tooltip = "1 ANON = " % anonPrice % "\n" % tooltip;
             }
             main->statusLabel->setToolTip(tooltip);
             main->statusIcon->setToolTip(tooltip);
         });
 
     }, [=](QNetworkReply* reply, const json&) {
-        // zcashd has probably disappeared.
+        // anond has probably disappeared.
         this->noConnection();
 
         // Prevent multiple dialog boxes, because these are called async
         static bool shown = false;
         if (!shown && prevCallSucceeded) { // show error only first time
             shown = true;
-            QMessageBox::critical(main, QObject::tr("Connection Error"), QObject::tr("There was an error connecting to zcashd. The error was") + ": \n\n"
+            QMessageBox::critical(main, QObject::tr("Connection Error"), QObject::tr("There was an error connecting to anond. The error was") + ": \n\n"
                 + reply->errorString(), QMessageBox::StandardButton::Ok);
             shown = false;
         }
@@ -760,9 +760,9 @@ void RPC::refreshBalances() {
 
         AppDataModel::getInstance()->setBalances(balT, balZ);
 
-        ui->balSheilded   ->setText(Settings::getZECDisplayFormat(balZ));
-        ui->balTransparent->setText(Settings::getZECDisplayFormat(balT));
-        ui->balTotal      ->setText(Settings::getZECDisplayFormat(balTotal));
+        ui->balSheilded   ->setText(Settings::getANONDisplayFormat(balZ));
+        ui->balTransparent->setText(Settings::getANONDisplayFormat(balT));
+        ui->balTotal      ->setText(Settings::getANONDisplayFormat(balTotal));
 
         ui->balSheilded   ->setToolTip(Settings::getUSDFormat(balZ));
         ui->balTransparent->setToolTip(Settings::getUSDFormat(balT));
@@ -975,7 +975,7 @@ void RPC::checkForUpdate(bool silent) {
     if  (conn == nullptr) 
         return noConnection();
 
-    QUrl cmcURL("https://api.github.com/repos/ZcashFoundation/zecwallet/releases");
+    QUrl cmcURL("https://api.github.com/repos/AnonFoundation/anonwallet/releases");
 
     QNetworkRequest req;
     req.setUrl(cmcURL);
@@ -1021,7 +1021,7 @@ void RPC::checkForUpdate(bool silent) {
                             .arg(currentVersion.toString()),
                         QMessageBox::Yes, QMessageBox::Cancel);
                     if (ans == QMessageBox::Yes) {
-                        QDesktopServices::openUrl(QUrl("https://github.com/ZcashFoundation/zecwallet/releases"));
+                        QDesktopServices::openUrl(QUrl("https://github.com/AnonFoundation/anonwallet/releases"));
                     } else {
                         // If the user selects cancel, don't bother them again for this version
                         s.setValue("update/lastversion", maxVersion.toString());
@@ -1042,8 +1042,8 @@ void RPC::checkForUpdate(bool silent) {
     });
 }
 
-// Get the ZEC->USD price from coinmarketcap using their API
-void RPC::refreshZECPrice() {
+// Get the ANON->USD price from coinmarketcap using their API
+void RPC::refreshANONPrice() {
     if  (conn == nullptr) 
         return noConnection();
 
@@ -1065,7 +1065,7 @@ void RPC::refreshZECPrice() {
                 } else {
                     qDebug() << reply->errorString();
                 }
-                Settings::getInstance()->setZECPrice(0);
+                Settings::getInstance()->setANONPrice(0);
                 return;
             } 
 
@@ -1073,15 +1073,15 @@ void RPC::refreshZECPrice() {
             
             auto parsed = json::parse(all, nullptr, false);
             if (parsed.is_discarded()) {
-                Settings::getInstance()->setZECPrice(0);
+                Settings::getInstance()->setANONPrice(0);
                 return;
             }
 
             for (const json& item : parsed.get<json::array_t>()) {
-                if (item["symbol"].get<json::string_t>() == "ZEC") {
+                if (item["symbol"].get<json::string_t>() == "ANON") {
                     QString price = QString::fromStdString(item["price_usd"].get<json::string_t>());
-                    qDebug() << "ZEC Price=" << price;
-                    Settings::getInstance()->setZECPrice(price.toDouble());
+                    qDebug() << "ANON Price=" << price;
+                    Settings::getInstance()->setANONPrice(price.toDouble());
 
                     return;
                 }
@@ -1092,14 +1092,14 @@ void RPC::refreshZECPrice() {
         }
 
         // If nothing, then set the price to 0;
-        Settings::getInstance()->setZECPrice(0);
+        Settings::getInstance()->setANONPrice(0);
     });
 }
 
-void RPC::shutdownZcashd() {
-    // Shutdown embedded zcashd if it was started
-    if (ezcashd == nullptr || ezcashd->processId() == 0 || conn == nullptr) {
-        // No zcashd running internally, just return
+void RPC::shutdownAnond() {
+    // Shutdown embedded anond if it was started
+    if (eanond == nullptr || eanond->processId() == 0 || conn == nullptr) {
+        // No anond running internally, just return
         return;
     }
 
@@ -1116,8 +1116,8 @@ void RPC::shutdownZcashd() {
     Ui_ConnectionDialog connD;
     connD.setupUi(&d);
     connD.topIcon->setBasePixmap(QIcon(":/icons/res/icon.ico").pixmap(256, 256));
-    connD.status->setText(QObject::tr("Please wait for ZecWallet to exit"));
-    connD.statusDetail->setText(QObject::tr("Waiting for zcashd to exit"));
+    connD.status->setText(QObject::tr("Please wait for AnonWallet to exit"));
+    connD.statusDetail->setText(QObject::tr("Waiting for anond to exit"));
 
     QTimer waiter(main);
 
@@ -1127,9 +1127,9 @@ void RPC::shutdownZcashd() {
     QObject::connect(&waiter, &QTimer::timeout, [&] () {
         waitCount++;
 
-        if ((ezcashd->atEnd() && ezcashd->processId() == 0) ||
+        if ((eanond->atEnd() && eanond->processId() == 0) ||
             waitCount > 30 || 
-            conn->config->zcashDaemon)  {   // If zcashd is daemon, then we don't have to do anything else
+            conn->config->anonDaemon)  {   // If anond is daemon, then we don't have to do anything else
             qDebug() << "Ended";
             waiter.stop();
             QTimer::singleShot(1000, [&]() { d.accept(); });
@@ -1139,7 +1139,7 @@ void RPC::shutdownZcashd() {
     });
     waiter.start(1000);
 
-    // Wait for the zcash process to exit.
+    // Wait for the anon process to exit.
     if (!Settings::getInstance()->isHeadless()) {
         d.exec(); 
     } else {

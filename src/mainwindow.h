@@ -54,7 +54,7 @@ public:
     void stopWebsocket();
 
     void balancesReady();
-    void payZcashURI(QString uri = "", QString myAddr = "");
+    void payAnonURI(QString uri = "", QString myAddr = "");
 
     void updateLabels();
     void updateTAddrCombo(bool checked);
@@ -65,7 +65,7 @@ public:
     QLabel*             statusLabel;
     QLabel*             statusIcon;
     QLabel*             loadingLabel;
-    QWidget*            zcashdtab;
+    QWidget*            anondtab;
 
     Logger*      logger;
 
@@ -78,7 +78,7 @@ private:
     void setupTransactionsTab();
     void setupRecieveTab();
     void setupBalancesTab();
-    void setupZcashdTab();
+    void setupAnondTab();
 
     void setupTurnstileDialog();
     void setupSettingsModal();
