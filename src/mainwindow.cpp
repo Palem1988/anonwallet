@@ -1286,7 +1286,7 @@ void MainWindow::setupRecieveTab() {
         } 
     });
 
-    QObject::connect(ui->rdioZSAddr, &QRadioButton::toggled, addZAddrsToComboList(true));
+    QObject::connect(ui->rdioZSAddr, &QRadioButton::toggled, addZAddrsToComboList(false));
 
     // Explicitly get new address button.
     QObject::connect(ui->btnRecieveNewAddr, &QPushButton::clicked, [=] () {

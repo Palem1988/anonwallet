@@ -150,7 +150,6 @@ void RPC::newZaddr(bool sapling, const std::function<void(json)>& cb) {
         {"jsonrpc", "1.0"},
         {"id", "someid"},
         {"method", "z_getnewaddress"},
-        {"params", { sapling ? "sapling" : "sprout" }},
     };
     
     conn->doRPCWithDefaultErrorHandling(payload, cb);
